@@ -1,2 +1,7 @@
-node_modules
-.idea
+/node_modules
+bundle.js
+npm-debug.log
+
+# IntelliJ
+*.iml
+/.idea
