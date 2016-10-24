@@ -34,6 +34,9 @@ exports.signup = function(req, res, next) {
             res.json({token : tokenForUser(user)});
         });
     });
+};
 
-
+exports.signin = function(req, res, next) {
+    // User is authed. Let's give him a token
+    res.send({token: tokenForUser(req.user)});
 };
