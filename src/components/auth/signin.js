@@ -9,6 +9,16 @@ class Signin extends Component {
         this.props.actions.signinUser({email, password});
     }
 
+    renderAlert() {
+        if (this.props.errorMessage) {
+            return (
+                <div className="alert alert-danger">
+                    <strong>Ooops!</strong>{this.props.errorMessage}
+                </div>
+            );
+        }
+    }
+
     render() {
         const {handleSubmit} = this.props;
         return (
@@ -19,8 +29,9 @@ class Signin extends Component {
                 </fieldset>
                 <fieldset className="form-group">
                     <label>Password:</label>
-                    <Field name="password" component="input" type="text" placeholder="Password" className="form-control"/>
+                    <Field name="password" component="input" type="password" placeholder="Password" className="form-control"/>
                 </fieldset>
+                {this.renderAlert()}
                 <button action="submit" className="btn btn-primary">Sign in</button>
             </form>
         )
@@ -38,4 +49,8 @@ function mapDispatchToProps(dispatch) {
     };
 }
 
-export default connect(null, mapDispatchToProps)(SigninForm);
+function mapStateToProps(state) {
+    return {errorMessage: state.auth.error};
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(SigninForm);
