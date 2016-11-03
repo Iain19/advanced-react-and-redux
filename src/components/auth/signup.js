@@ -15,13 +15,28 @@ const renderField = ({ input, label, type, placeholder, meta: { touched, error, 
 );
 
 class Signup extends Component {
-    render() {console.log(this.props);
+    handleFormSubmit(formProps) {
+        this.props.actions.signupUser(formProps);
+    }
+
+    renderAlert() {
+        if (this.props.errorMessage) {
+            return (
+                <div className="alert alert-danger">
+                    <strong>Ooops!</strong>{this.props.errorMessage}
+                </div>
+            );
+        }
+    }
+
+    render() {
         const {handleSubmit, error} = this.props;
         return (
-            <form onSubmit={handleSubmit(()=>{}/*this.handleFormSubmit.bind(this)*/)}>
+            <form onSubmit={handleSubmit(this.handleFormSubmit.bind(this))}>
                 <Field name="email" type="text" placeholder="Email" label="Email" className="form-control" component={renderField}/>
                 <Field name="password" type="password" placeholder="Password" label="Password" className="form-control" component={renderField}/>
                 <Field name="passwordConfirm" type="password" placeholder="Confirm Password" label="Confirm Password:" className="form-control" component={renderField}/>
+                {this.renderAlert()}
                 <button action="submit" className="btn btn-primary">Sign up!</button>
             </form>
         );
@@ -56,4 +71,14 @@ const SignupForm = reduxForm({
     validate
 })(Signup);
 
-export default connect()(SignupForm);
+function mapStateToProps(state) {
+    return {errorMessage: state.auth.error};
+}
+
+function mapDispatchToProps(dispatch) {
+    return {
+        actions: bindActionCreators(actions, dispatch)
+    };
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(SignupForm);
